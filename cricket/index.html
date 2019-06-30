@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+	<html>
+		<head>
+			<title>Match</title>
+			<script type="text/javascript">
+      			function setCookie(c_name,value,exdays) {
+      					var exdate=new Date();
+	      				exdate.setDate(exdate.getDate() + exdays);
+	      				var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+	      				document.cookie=c_name + "=" + c_value;
+      				}
+      
+      			function getCookie(c_name) {
+		      			var i,x,y,ARRcookies=document.cookie.split(";");
+      					for (i=0;i<ARRcookies.length;i++){
+     							x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+      							y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+      							x=x.replace(/^\s+|\s+$/g,"");
+      							if (x==c_name){
+      									return unescape(y);
+      								}
+      						}
+      				}
+    		</script>
+			<script type="text/javascript">
+				function getUrlVars() {
+    					var vars = {};
+    					var url = decodeURI(window.location.href);
+    					var parts = url.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {vars[key] = value;});
+    					return vars;
+					}
+				var key = getUrlVars()["key"];
+				var scond = getCookie("runs");
+				var ball = 1;
+				var log = 0;
+				var overn = 0;
+				var run = 0;
+				var runs = 0;
+				var out = 0;
+				var wkt = 0;
+				console.log(key);
+
+				function getInfo(){
+						var formate = document.getElementById("formate").value;
+						var dtls = document.getElementById("dtls").value;
+						console.log(log);
+						if (log == 0) {
+								if (key == null || key == "" || key == undefined) {
+										var kk = "Welcome First team to bat";
+										console.log("key = null");
+									}
+								if (key == 1) {
+										var kk = "Second team to bat";
+										alert(scond);
+										var formate = getCookie("formate");
+										var dtls = getCookie("dtls");
+										console.log("key = 1");
+									}
+								if (key == 2) {
+										kk = "First team to bat";
+										console.log("key = 2");
+									}
+								else {
+										console.log("outside all if");
+										console.log(key);
+								}
+								log = 1;
+								console.log(log);
+								document.getElementById("formate").value = formate;
+								document.getElementById("dtls").value = dtls;
+								document.getElementById("start").innerHTML = kk;
+							}
+						console.log(log);
+						document.getElementById("button").innerHTML = "BALL";
+						var ran = Math.floor(Math.random() * 7);
+						if(ball == 7) {
+								overn += 1;
+								ball = 1;
+							}
+						var over= "Overs: " + overn + " ";
+						var bc = "No.of balls: " + ball+ " ";
+						switch(ran) {
+								case 0:
+									out = "out";
+									run = 0;
+								break;
+								case 1:
+									out = "1";
+									run = 1;
+								break;
+								case 2:
+									out = "2";
+									run = 2;
+								break;
+								case 3:
+									out = "3";
+									run = 3;
+								break;
+								case 4:
+									out = "4";
+									run = 4;
+								break;
+								case 5:
+									out = "wide";
+									run = 1;
+								break;
+								case 6:
+									out = "6";
+									run = 6;
+								break;
+								default:
+									out = "no entry"
+									run = 0;
+							}
+						if(out == "wide") {
+				
+							}
+						else {
+								ball += 1;
+							}
+						runs =runs +run;
+						var totRun = "  Total Runs Scored: " + runs;
+						document.getElementById("crntrslt").innerHTML = out + totRun;
+						document.getElementById("overs").innerHTML = bc+over;
+						if (out == "out") {
+								wkt += 1;
+								var wikt = "wicket " + wkt;
+								alert(wikt);
+								document.getElementById("wicket").innerHTML = wikt;
+								if (wkt == 5) {
+										if (key == 1) {
+												if (scond == runs) {
+														alert("its a tie");
+													}
+												if (scond >= runs) {
+														alert("First tean win");
+													}
+											}
+										var lBall = ball - 1;
+										alert("match over!" + totRun);
+										var myObj = {runs1: runs, overs1: overn, balls1: lBall, formate1: formate, dtls1: dtls, ky: key};
+										var myJSON = JSON.stringify(myObj);
+										var url = "test.html?x="+myJSON;
+										var eUrl = encodeURI(url);
+										window.location = eUrl;
+									}
+							}
+						if (key == 1) {
+          						if (scond <= runs) {
+          								var lBall = ball - 1;
+            							alert("Second tean win");
+            							var myObj = {runs1: runs, overs1: overn, balls1: lBall, formate1: formate, dtls1: dtls, ky: key};
+            							console.log(lBall);
+										var myJSON = JSON.stringify(myObj);
+										var url = "test.html?x="+myJSON;
+										var eUrl = encodeURI(url);
+										window.location = eUrl;
+									}
+							}
+					}
+			</script>
+		</head>
+		<body>
+			<div>
+				<p id="start"></p>
+				<select id="formate">
+                	<option selected value="1">-- Choose the formate --</option>
+	                <option value="20-20">20-20</option>
+	                <option value="ODI">ODI</option>
+	                <option value="TEST">TEST</option>
+            	</select>
+        	</div>
+        	<div>
+				<textarea id="dtls" name="msg" placeholder="Write some message ..." style="height:100px" ></textarea>
+			</div>
+			<button onclick="getInfo()" id="button">START</button>
+			<ul>
+				<li id="crntrslt"></li>
+				<li id="overs"></li>
+				<li id="wicket"></li>
+			</ul>
+		</body>
+	</html>
