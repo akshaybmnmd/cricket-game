@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <title>Match comparison</title>
+      <script type="text/javascript">
+        function setCookie(c_name,value,exdays) {
+            var exdate=new Date();
+            exdate.setDate(exdate.getDate() + exdays);
+            var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+            document.cookie=c_name + "=" + c_value;
+          }
+
+        function getCookie(c_name) {
+            var i,x,y,ARRcookies=document.cookie.split(";");
+            for (i=0;i<ARRcookies.length;i++) {
+                x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+                y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+                x=x.replace(/^\s+|\s+$/g,"");
+                if (x==c_name) {
+                    return unescape(y);
+                  }
+              }
+          }
+      </script>
+      <style>
+        * {
+              box-sizing: border-box;
+          }
+        div {
+              padding: 10px;
+              background-color: #f6f6f6;
+              overflow: hidden;
+          }
+        input[type=text], textarea, select {
+              font: 17px Calibri;
+              width: 100%;
+              padding: 12px;
+              border: 1px solid #ccc;
+              border-radius: 4px;
+          }
+          input[type=button]{ 
+              font: 17px Calibri;
+              width: auto;
+              float: right;
+              cursor: pointer;
+              padding: 7px;
+          }
+      </style>
+    </head>
+    <body>
+      <div>
+        <div>
+          Runs<input type="text" id="totRuns" placeholder="Total Runs" />
+        </div>
+        <div>
+          Overs<input type="text" id="totOvers" placeholder="Overs played" />
+        </div>
+        <div>
+          Ball<input type="text" id="totBalls" placeholder="Ball" />
+        </div>
+        <div>
+          <select id="formate">
+            <option selected value="1">-- Choose the formate --</option>
+            <option value="20-20">20-20</option>
+            <option value="ODI">ODI</option>
+            <option value="TEST">TEST</option>
+          </select>
+        </div>
+        <div>
+          <textarea id="dtls" name="msg" placeholder="Write some message ..." style="height:100px" value="No details about the match"></textarea>
+        </div>
+        <div>
+          <input type="button" id="bt" value="Save data to file" onclick="saveFile()" />
+        </div>
+      </div>
+    </body>
+    <script>
+      function getUrlVars() {
+          var vars = {};
+          var url = decodeURI(window.location.href);
+          var parts = url.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {vars[key] = value;});
+          let obj = JSON.parse(vars['x']);
+          return obj;
+        }
+      var runs = getUrlVars()["runs1"];
+      var overs = getUrlVars()["overs1"];
+      var balls = getUrlVars()["balls1"];
+      var formate = getUrlVars()["formate1"];
+      var dtls = getUrlVars()["dtls1"];
+      var key1 = getUrlVars()["ky"];
+      document.getElementById('totRuns').value = runs;
+      document.getElementById('totOvers').value = overs;
+      document.getElementById('totBalls').value = balls;
+      document.getElementById('formate').value = formate;
+      document.getElementById('dtls').value = dtls;
+      var key = 1;
+      if(runs == null || runs == "") {
+          var key = 2;
+        }
+
+      let saveFile = () => {
+          if(runs!= document.getElementById('totRuns').value || overs!= document.getElementById('totOvers').value || balls!= document.getElementById('totBalls').value || formate!= document.getElementById('formate').value || dtls!= document.getElementById('dtls').value) {
+              alert('Any data changed in this page will not be taken valid!!');
+            }
+          // //this code is used to save the datas to externel .txt file via download portel
+          // let data = 'Runs: ' + runs + '\r\n' + 
+          //            'Over: ' + overs + '\r\n' + 
+          //            'Ball: ' + balls + '\r\n' + 
+          //            'formate: ' + formate + '\r\n' + 
+          //            'Details: ' + dtls;
+          // const textToBLOB = new Blob([data], { type: 'text/plain' });
+          // const sFileName = 'formData.txt';
+          // let newLink = document.createElement("a");
+          // newLink.download = sFileName;
+          // if (window.webkitURL != null) {
+          //     newLink.href = window.webkitURL.createObjectURL(textToBLOB);
+          //   }
+          // else {
+          //     newLink.href = window.URL.createObjectURL(textToBLOB);
+          //     newLink.style.display = "none";
+          //     document.body.appendChild(newLink);
+          //   }
+          // newLink.click();
+          if (key1 == 1) {
+              var first = getCookie("runs");
+              if (first == runs) {
+                  alert("its a tie");
+                }
+              if (first >= runs) {
+                 alert("First team win");
+                }
+              if (first <= runs) {
+                 alert("Second tean win");
+                }
+            }
+          else {
+              setCookie("runs",runs,1);
+              setCookie("formate",formate,1);
+              setCookie("dtls",dtls,1);
+              alert("going back");
+              window.location = "index.html?key=" + key;
+            }
+        }
+    </script>
+  </html>
